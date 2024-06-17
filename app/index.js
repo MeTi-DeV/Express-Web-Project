@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
+const bodyParser = require("body-parser");
 const app = express();
 module.exports = class Application {
   constructor() {
@@ -22,6 +23,8 @@ module.exports = class Application {
   setConfig() {
     app.use(express.static(path.join(__dirname, "public")));
     console.log(path.join(__dirname, "resource/views"));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.set("view engine", "ejs");
     app.set("views", path.join(__dirname, "resource/views"));
     app.use(expressLayouts);
@@ -30,8 +33,6 @@ module.exports = class Application {
     app.set("layout extractStyles", true);
   }
   setRoutes() {
-    app.get("/", (req, res) => {
-      res.render("index");
-    });
+    app.use(require("./routes"));
   }
 };
