@@ -1,10 +1,12 @@
 const path = require("path");
 const express = require("express");
+const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
 const app = express();
 module.exports = class Application {
   constructor() {
     this.configServer();
+    this.configDatabase();
     this.setConfig();
     this.setRoutes();
   }
@@ -13,6 +15,9 @@ module.exports = class Application {
       if (err) console.log(err);
       console.log("server run on port 3000 ...");
     });
+  }
+  async configDatabase() {
+    await mongoose.connect("mongodb://localhost:27017/test");
   }
   setConfig() {
     app.use(express.static(path.join(__dirname, "public")));
